@@ -2,9 +2,10 @@ package com.johny.mibanco.infraestructrure.controllers;
 
 import com.johny.mibanco.application.services.GenerateCustomerAccountReportService;
 import com.johny.mibanco.domain.AccountReport;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,8 +21,8 @@ public class CustomerReportController {
 
     @GetMapping("/{customerId}/report")
     public List<AccountReport> generateCustomerReport(@PathVariable UUID customerId,
-                                                      @RequestParam Date startDate,
-                                                      @RequestParam Date endDate ) {
+                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate ) {
         return generateCustomerAccountReportService.generateReportByDateRange(customerId, startDate, endDate);
     }
 

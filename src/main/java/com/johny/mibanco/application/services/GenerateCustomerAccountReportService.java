@@ -5,6 +5,8 @@ import com.johny.mibanco.domain.Customer;
 import com.johny.mibanco.domain.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,9 +20,13 @@ public class GenerateCustomerAccountReportService {
         this.customerRepository = customerRepository;
     }
 
-    public List<AccountReport> generateReportByDateRange(UUID customerId, Date startDate, Date endDate) {
+    public List<AccountReport> generateReportByDateRange(UUID customerId, LocalDate startDate, LocalDate endDate) {
         Customer customer = customerRepository.findById(customerId);
-        return customer.generateReportByDateRange(startDate, endDate);
+        return customer.generateReportByDateRange(convertLocalDateToDate(startDate), convertLocalDateToDate(endDate));
+    }
+
+    private Date convertLocalDateToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }
